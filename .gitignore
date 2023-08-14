@@ -1,0 +1,13 @@
+# Ignore compiled JavaScript files
+*.js
+*.js.map
+
+# Ignore compiled TypeScript declaration files
+*.d.ts
+*.d.ts.map
+
+# Ignore the output directory of the TypeScript compiler
+/dist/
+
+# Ignore node_modules directory (uncomment the next line if using Node.js)
+# /node_modules/
