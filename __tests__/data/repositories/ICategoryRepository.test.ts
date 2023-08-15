@@ -1,68 +1,34 @@
 import { ICategoryRepository } from "../../../src/data/repositories/ICategoryRepository";
 import { ICategory } from "../../../src/domain/entities/ICategory";
-import { describe, beforeEach, it, expect } from '@jest/globals';
+import { jest, describe, beforeEach, it, expect } from '@jest/globals';
 
-// Mock implementation of the ICategoryRepository interface
-class CategoryRepositoryMock implements ICategoryRepository {
-  findById(id: string): Promise<ICategory | null> {
-    // Implement the mock behavior for the findById method
-    // Return the expected result based on the given id
-    // You can also throw an error to simulate an exceptional case
-    return Promise.resolve(
-      {
-        identifier: id,
-        name: 'Some Category',
-        groupId: 'some-group-id',
-      }
-    );
-  }
-
-  findAll(): Promise<ICategory[]> {
-    // Implement the mock behavior for the findAll method
-    // Return the expected result
-    // You can also throw an error to simulate an exceptional case
-    return Promise.resolve(
-      [
-        {
-          identifier: 'some-id',
-          name: 'Some Category',
-          groupId: 'some-group-id',
-        },
-        {
-          identifier: 'some-other-id',
-          name: 'Some Other Category',
-          groupId: 'some-group-id',
-        },
-      ]
-    );
-  }
-
-  create(name: string, group_id: string): Promise<ICategory> {
-    // Implement the mock behavior for the create method
-    // Return the expected result based on the given arguments
-    // You can also throw an error to simulate an exceptional case
-    return Promise.resolve(
+const categoryRepositoryMock: ICategoryRepository = {
+  findById: jest.fn((id: string) => Promise.resolve({
+    identifier: id,
+    name: 'Some Category',
+    groupId: 'some-group-id',
+  })),
+  findAll: jest.fn(() => Promise.resolve(
+    [
       {
         identifier: 'some-id',
-        name,
-        groupId: group_id,
-      }
-    );
-  }
-
-  update(category: ICategory): Promise<void> {
-    // Implement the mock behavior for the update method
-    // Verify that the input category is correct and handle it accordingly
-    // You can also throw an error to simulate an exceptional case
-    return Promise.resolve();
-  }
-
-  delete(id: string): Promise<void> {
-    // Implement the mock behavior for the delete method
-    // Verify that the input id is correct and handle it accordingly
-    // You can also throw an error to simulate an exceptional case
-    return Promise.resolve();
-  }
+        name: 'Some Category',
+        groupId: 'some-group-id',
+      },
+      {
+        identifier: 'some-other-id',
+        name: 'Some Other Category',
+        groupId: 'some-group-id',
+      },
+    ]
+  )),
+  create: jest.fn((name: string, group_id: string) => Promise.resolve({
+    identifier: 'some-id',
+    name,
+    groupId: group_id,
+  })),
+  update: jest.fn((category: ICategory) => Promise.resolve()),
+  delete: jest.fn((id: string) => Promise.resolve()),
 }
 
 describe('ICategoryRepository', () => {
@@ -70,7 +36,7 @@ describe('ICategoryRepository', () => {
 
   beforeEach(() => {
     // Initialize the mock implementation of the repository before each test
-    categoryRepository = new CategoryRepositoryMock();
+    categoryRepository = categoryRepositoryMock;
   });
 
   it('should find a category by ID', async () => {

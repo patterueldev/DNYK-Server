@@ -6,6 +6,9 @@ import * as yaml from 'js-yaml';
 
 import routerv1 from './src/routerv1';
 
+import dotenv from 'dotenv';
+dotenv.config()
+
 function parseOpenAPISpec(file: string): any {
   const yamlContent = fs.readFileSync(file, 'utf8');
   const parsedData = yaml.load(yamlContent);
