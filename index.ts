@@ -4,7 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
-import router from './src/router';
+import routerv1 from './src/routerv1';
 
 function parseOpenAPISpec(file: string): any {
   const yamlContent = fs.readFileSync(file, 'utf8');
@@ -13,16 +13,13 @@ function parseOpenAPISpec(file: string): any {
 }
 
 // Replace 'openapi.yaml' with the path to your OpenAPI YAML file
-const openApiSpec = parseOpenAPISpec('openapi.yaml');
-console.log(openApiSpec);
-
 const app = express();
 
 // Serve the Swagger UI at /api-docs
+const openApiSpec = parseOpenAPISpec('openapi.yaml');
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
-app.use('/api', router);
 
-// Add other routes and middleware as needed
+app.use('/v1', routerv1);
 
 // Start the server
 app.listen(3000, () => {

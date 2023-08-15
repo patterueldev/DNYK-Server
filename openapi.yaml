@@ -84,3 +84,18 @@ paths:
           description: User updated successfully
         '404':
           description: User not found
+  /categories:
+    post:
+      summary: Create a new category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Category created successfully

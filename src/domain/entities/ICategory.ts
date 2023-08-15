@@ -1,7 +1,7 @@
 // src/domain/entities/ICategory.ts
 
 export interface ICategory {
-  id: string;
+  identifier: string;
   name: string;
   groupId: string;
 }
