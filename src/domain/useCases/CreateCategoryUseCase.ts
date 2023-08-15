@@ -3,7 +3,7 @@
 import { ICategory } from "../entities/ICategory";
 import { ICategoryRepository } from '../../data/repositories/ICategoryRepository';
 
-export class CreateCategoryUseCase {
+export default class CreateCategoryUseCase {
   constructor(private categoryRepository: ICategoryRepository) {}
 
   async execute(name: string, groupId: string): Promise<ICategory> {

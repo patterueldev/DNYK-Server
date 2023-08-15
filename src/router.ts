@@ -3,7 +3,7 @@ import express from 'express';
 const router = express.Router();
 
 // Import the use case(s) that you want to associate with each route
-import { CreateCategoryUseCase } from './domain/useCases/CreateCategoryUseCase';
+import CreateCategoryUseCase from './domain/useCases/CreateCategoryUseCase';
 import { MDCategoryDataSource } from './data/dataSources/MDCategoryDataSource';
 const categoryRepository = new MDCategoryDataSource();
 const createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);

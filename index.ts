@@ -4,7 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
-import router from './router.js';
+import router from './src/router';
 
 function parseOpenAPISpec(file: string): any {
   const yamlContent = fs.readFileSync(file, 'utf8');
