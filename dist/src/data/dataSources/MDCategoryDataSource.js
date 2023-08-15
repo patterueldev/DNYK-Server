@@ -37,12 +37,17 @@ const mongoose_1 = __importStar(require("mongoose"));
 const categorySchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     groupId: { type: String, required: true },
+}, {
+    toJSON: { getters: true },
+    id: false,
 });
-exports.MDCategory = mongoose_1.default.model('MDCategory', categorySchema);
+categorySchema.virtual('identifier').get(function () {
+    return this._id.toString();
+});
+exports.MDCategory = mongoose_1.default.model('categories', categorySchema);
 class MDCategoryDataSource {
-    constructor(uri, dbName) {
+    constructor(uri) {
         this.uri = uri;
-        this.dbName = dbName;
     }
     initializeClient() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -62,7 +67,10 @@ class MDCategoryDataSource {
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.initializeClient();
-            return yield exports.MDCategory.find();
+            console.log("Finding all categories");
+            const categories = yield exports.MDCategory.find();
+            console.log("Categories: ", categories);
+            return categories;
         });
     }
     create(name, groupId) {

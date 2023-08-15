@@ -13,25 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const routerv1 = express_1.default.Router();
 // Import the use case(s) that you want to associate with each route
+const GetCategoriesUseCase_1 = __importDefault(require("./domain/useCases/GetCategoriesUseCase"));
 const CreateCategoryUseCase_1 = __importDefault(require("./domain/useCases/CreateCategoryUseCase"));
 const MDCategoryDataSource_1 = require("./data/dataSources/MDCategoryDataSource");
 const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/dnyk";
-const dbName = process.env.MONGODB_DB || "dnyk";
-const categoryRepository = new MDCategoryDataSource_1.MDCategoryDataSource(uri, dbName);
+const categoryRepository = new MDCategoryDataSource_1.MDCategoryDataSource(uri);
+const getCategoriesUseCase = new GetCategoriesUseCase_1.default(categoryRepository);
 const createCategoryUseCase = new CreateCategoryUseCase_1.default(categoryRepository);
 routerv1.get('/test', (req, res) => {
-    res.json({ message: 'Hello World!!!' });
+    res.json({ message: 'Hello World!' });
 });
 routerv1.get('/test2', (req, res) => {
     res.json({ message: 'Hello World 2!' });
 });
 routerv1.get('/categories', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const categories = yield categoryRepository.findAll();
+    const categories = yield getCategoriesUseCase.execute();
     res.json(categories);
 }));
-routerv1.post('/categories/create', express_1.default.json(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+routerv1.post('/categories', express_1.default.json(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, groupId } = req.body;
     const category = yield createCategoryUseCase.execute(name, groupId);
     res.json(category);
