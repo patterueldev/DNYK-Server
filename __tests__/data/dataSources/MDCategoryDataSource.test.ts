@@ -36,11 +36,12 @@ describe('MDCategoryDataSource', () => {
   it('should get all categories', async () => {
     // given - populate the database
     let groupId = 'group1';
+    var mockCategories: object[] = [];
     for(let i = 0; i < 2; i++) {
       let name = `category${i}`;
-      let category = await new MDCategory({name, groupId})
-      await category.save();
+      mockCategories.push({name, groupId});
     }
+    await MDCategory.create(mockCategories)
 
     // when - get all categories
     let categories = await categoryRepository.getCategories();
