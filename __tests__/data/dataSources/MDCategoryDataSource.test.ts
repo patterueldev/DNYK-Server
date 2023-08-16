@@ -27,7 +27,7 @@ describe('MDCategoryDataSource', () => {
     let groupId = 'group1';
 
     // when
-    let category = await categoryRepository.create('category1', 'group1' );
+    let category = await categoryRepository.addCategory('category1', 'group1' );
 
     // then
     expect(category).toHaveProperty('identifier');
@@ -43,7 +43,7 @@ describe('MDCategoryDataSource', () => {
     }
 
     // when - get all categories
-    let categories = await categoryRepository.findAll();
+    let categories = await categoryRepository.getCategories();
 
     // then - expect to have 2 categories
     expect(categories).toHaveLength(2);
@@ -62,7 +62,7 @@ describe('MDCategoryDataSource', () => {
     let id = newCategory._id.toString();
 
     // when
-    let categoryFound = await categoryRepository.findById(id);
+    let categoryFound = await categoryRepository.getCategory(id);
     
     // then
     if (!categoryFound) throw new Error('Category not found');

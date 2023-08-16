@@ -3,12 +3,12 @@ import { ICategory } from "../../../src/domain/entities/ICategory";
 import { jest, describe, beforeEach, it, expect } from '@jest/globals';
 
 const categoryRepositoryMock: ICategoryRepository = {
-  findById: jest.fn((id: string) => Promise.resolve({
+  getCategory: jest.fn((id: string) => Promise.resolve({
     identifier: id,
     name: 'Some Category',
     groupId: 'some-group-id',
   })),
-  findAll: jest.fn(() => Promise.resolve(
+  getCategories: jest.fn(() => Promise.resolve(
     [
       {
         identifier: 'some-id',
@@ -22,13 +22,13 @@ const categoryRepositoryMock: ICategoryRepository = {
       },
     ]
   )),
-  create: jest.fn((name: string, group_id: string) => Promise.resolve({
+  addCategory: jest.fn((name: string, group_id: string) => Promise.resolve({
     identifier: 'some-id',
     name,
     groupId: group_id,
   })),
-  update: jest.fn((category: ICategory) => Promise.resolve()),
-  delete: jest.fn((id: string) => Promise.resolve()),
+  updateCategory: jest.fn((category: ICategory) => Promise.resolve()),
+  deleteCategory: jest.fn((id: string) => Promise.resolve()),
 }
 
 describe('ICategoryRepository', () => {
@@ -43,7 +43,7 @@ describe('ICategoryRepository', () => {
     const categoryId = 'some-id';
 
     // Call the findById method on the repository instance
-    const category = await categoryRepository.findById(categoryId);
+    const category = await categoryRepository.getCategory(categoryId);
 
     // Assert that the returned category matches the expected result
     expect(category).toEqual(
@@ -57,7 +57,7 @@ describe('ICategoryRepository', () => {
 
   it('should retrieve all categories', async () => {
     // Call the findAll method on the repository instance
-    const categories = await categoryRepository.findAll();
+    const categories = await categoryRepository.getCategories();
 
     // Assert that the returned categories match the expected result
     expect(categories.length).toEqual(2);
@@ -68,7 +68,7 @@ describe('ICategoryRepository', () => {
     const groupId = 'some-group-id';
 
     // Call the create method on the repository instance
-    const createdCategory = await categoryRepository.create(categoryName, groupId);
+    const createdCategory = await categoryRepository.addCategory(categoryName, groupId);
 
     // Assert that the created category matches the expected result
     expect(createdCategory.name).toEqual(categoryName);
@@ -82,7 +82,7 @@ describe('ICategoryRepository', () => {
     };
 
     // Call the update method on the repository instance
-    await categoryRepository.update(updatedCategory);
+    await categoryRepository.updateCategory(updatedCategory);
 
     // Assert that the necessary actions were performed appropriately
     // You can verify if the update was successful or throw an error to simulate failure
@@ -92,7 +92,7 @@ describe('ICategoryRepository', () => {
     const categoryId = 'some-id';
 
     // Call the delete method on the repository instance
-    await categoryRepository.delete(categoryId);
+    await categoryRepository.deleteCategory(categoryId);
 
     // Assert that the necessary actions were performed appropriately
     // You can verify if the deletion was successful or throw an error to simulate failure

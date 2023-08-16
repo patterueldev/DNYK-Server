@@ -37,12 +37,12 @@ export class MDCategoryDataSource implements ICategoryRepository {
     return this.client;
   }
 
-  async findById(id: string): Promise<ICategory | null> {
+  async getCategory(id: string): Promise<ICategory | null> {
     const category = await MDCategory.findById(id);
     return category;
   }
 
-  async findAll(): Promise<ICategory[]> {
+  async getCategories(): Promise<ICategory[]> {
     await this.initializeClient();
     console.log("Finding all categories");
     const categories = await MDCategory.find();
@@ -50,19 +50,19 @@ export class MDCategoryDataSource implements ICategoryRepository {
     return categories;
   }
 
-  async create(name: string, groupId: string): Promise<ICategory> {
+  async addCategory(name: string, groupId: string): Promise<ICategory> {
     await this.initializeClient();
     const category = new MDCategory({ name, groupId });
     await category.save();
     return category;
   }
 
-  async update(category: ICategory): Promise<void> {
+  async updateCategory(category: ICategory): Promise<void> {
     throw new Error("Method not implemented.");
     // await this.collection.updateOne({ _id: category.id }, { $set: category });
   }
 
-  async delete(id: string): Promise<void> {
+  async deleteCategory(id: string): Promise<void> {
     throw new Error("Method not implemented.");
     // await this.collection.deleteOne({ _id: id });
   }

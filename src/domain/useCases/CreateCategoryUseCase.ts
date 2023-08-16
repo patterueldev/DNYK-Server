@@ -7,7 +7,7 @@ export default class CreateCategoryUseCase {
   constructor(private categoryRepository: ICategoryRepository) {}
 
   async execute(name: string, groupId: string): Promise<ICategory> {
-    const createdCategory = await this.categoryRepository.create(name, groupId);
+    const createdCategory = await this.categoryRepository.addCategory(name, groupId);
     return createdCategory;
   }
 }

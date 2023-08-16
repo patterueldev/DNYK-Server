@@ -6,7 +6,7 @@ export default class GetCategoriesUseCase {
 
   async execute(): Promise<ICategory[]> {
     // fetch categories from the repository
-    const categories = await this.categoryRepository.findAll();
+    const categories = await this.categoryRepository.getCategories();
     // include a fixed category "Ready to Assign"
     const readyToAssignCategory = {
       identifier: "0",
