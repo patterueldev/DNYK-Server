@@ -1,0 +1,13 @@
+// src/domain/usecases/CreateCategoryUseCase.ts
+
+import { ICategory } from "../entities/ICategory";
+import { ICategoryRepository } from '../../data/repositories/ICategoryRepository';
+
+export default class CreateCategoryUseCase {
+  constructor(private categoryRepository: ICategoryRepository) {}
+
+  async execute(name: string, groupId: string): Promise<ICategory> {
+    const createdCategory = await this.categoryRepository.addCategory(name, groupId);
+    return createdCategory;
+  }
+}
