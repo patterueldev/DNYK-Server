@@ -1,4 +1,5 @@
-import { MDCategory, MDCategoryDataSource } from "../../../src/data/dataSources/MDCategoryDataSource";
+import { MDCategoryDataSource } from "../../../src/data/dataSources/MDCategoryDataSource";
+import { MDCategory } from "../../../src/domain/entities/MongoDBEntities/MDCategory";
 import { describe, it, expect} from "@jest/globals";
 import { ICategoryRepository } from "../../../src/data/repositories/ICategoryRepository";
 import { afterEach, beforeEach } from "@jest/globals";

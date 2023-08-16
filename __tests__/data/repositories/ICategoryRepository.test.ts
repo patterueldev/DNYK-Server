@@ -1,6 +1,7 @@
 import { ICategoryRepository } from "../../../src/data/repositories/ICategoryRepository";
 import { ICategory } from "../../../src/domain/entities/ICategory";
 import { jest, describe, beforeEach, it, expect } from '@jest/globals';
+import { ICategoryGroup } from "../../../src/domain/entities/ICategoryGroup";
 
 const categoryRepositoryMock: ICategoryRepository = {
   getCategory: jest.fn((id: string) => Promise.resolve({
@@ -29,6 +30,21 @@ const categoryRepositoryMock: ICategoryRepository = {
   })),
   updateCategory: jest.fn((category: ICategory) => Promise.resolve()),
   deleteCategory: jest.fn((id: string) => Promise.resolve()),
+  getGroup: function (id: string): Promise<ICategoryGroup | null> {
+    throw new Error("Function not implemented.");
+  },
+  getGroups: function (): Promise<ICategoryGroup[]> {
+    throw new Error("Function not implemented.");
+  },
+  addGroup: function (name: String): Promise<ICategoryGroup> {
+    throw new Error("Function not implemented.");
+  },
+  updateGroup: function (group: ICategoryGroup): Promise<void> {
+    throw new Error("Function not implemented.");
+  },
+  deleteGroup: function (id: string): Promise<void> {
+    throw new Error("Function not implemented.");
+  }
 }
 
 describe('ICategoryRepository', () => {

@@ -4,10 +4,11 @@ import swaggerUi from 'swagger-ui-express';
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
-import routerv1 from './src/routerv1';
-
 import dotenv from 'dotenv';
 dotenv.config()
+
+import routerv1 from './src/routerv1';
+
 
 function parseOpenAPISpec(file: string): any {
   const yamlContent = fs.readFileSync(file, 'utf8');

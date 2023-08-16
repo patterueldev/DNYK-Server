@@ -9,7 +9,9 @@ import GetCategoriesUseCase from './domain/useCases/GetCategoriesUseCase';
 import CreateCategoryUseCase from './domain/useCases/CreateCategoryUseCase';
 import { MDCategoryDataSource } from './data/dataSources/MDCategoryDataSource';
 
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/dnyk";
+const uri = process.env.MONGODB_URI;
+if (!uri) throw new Error('Missing mongodb uri');
+
 const categoryRepository = new MDCategoryDataSource(uri);
 
 const getCategoriesUseCase = new GetCategoriesUseCase(categoryRepository);

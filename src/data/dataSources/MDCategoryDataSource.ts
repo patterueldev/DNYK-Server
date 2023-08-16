@@ -1,26 +1,9 @@
 import { ICategory } from "../../domain/entities/ICategory";
 import { ICategoryRepository } from "../repositories/ICategoryRepository";
-import mongoose, { Document, Schema } from 'mongoose';
-
-interface ICategoryModel extends ICategory, Document {
-  identifier: string;
-  name: string;
-  groupId: string;
-}
-
-const categorySchema = new Schema<ICategoryModel>({
-  name: { type: String, required: true },
-  groupId: { type: String, required: true },
-}, {
-  toJSON: { getters: true },
-  id: false,
-});
-categorySchema.virtual('identifier').get(function (this: ICategoryModel) {
-  return this._id.toString();
-});
-
-export const MDCategory = mongoose.model<ICategory>('categories', categorySchema);
-
+import mongoose from "mongoose";
+import { MDCategory } from "../../domain/entities/MongoDBEntities/MDCategory";
+import { ICategoryGroup } from "../../domain/entities/ICategoryGroup";
+import { MDCategoryGroup } from "../../domain/entities/MongoDBEntities/MDCategoryGroup";
 
 export class MDCategoryDataSource implements ICategoryRepository {
   private uri: string;
@@ -44,9 +27,7 @@ export class MDCategoryDataSource implements ICategoryRepository {
 
   async getCategories(): Promise<ICategory[]> {
     await this.initializeClient();
-    console.log("Finding all categories");
     const categories = await MDCategory.find();
-    console.log("Categories: ", categories);
     return categories;
   }
 
@@ -65,5 +46,23 @@ export class MDCategoryDataSource implements ICategoryRepository {
   async deleteCategory(id: string): Promise<void> {
     throw new Error("Method not implemented.");
     // await this.collection.deleteOne({ _id: id });
+  }
+
+  getGroup(id: string): Promise<ICategoryGroup | null> {
+    throw new Error("Method not implemented.");
+  }
+  async getGroups(): Promise<ICategoryGroup[]> {
+    await this.initializeClient();
+    const groups = await MDCategoryGroup.find();
+    return groups;
+  }
+  addGroup(name: String): Promise<ICategoryGroup> {
+    throw new Error("Method not implemented.");
+  }
+  updateGroup(group: ICategoryGroup): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  deleteGroup(id: string): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 }
