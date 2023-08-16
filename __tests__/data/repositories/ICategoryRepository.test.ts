@@ -30,21 +30,26 @@ const categoryRepositoryMock: ICategoryRepository = {
   })),
   updateCategory: jest.fn((category: ICategory) => Promise.resolve()),
   deleteCategory: jest.fn((id: string) => Promise.resolve()),
-  getGroup: function (id: string): Promise<ICategoryGroup | null> {
-    throw new Error("Function not implemented.");
-  },
-  getGroups: function (): Promise<ICategoryGroup[]> {
-    throw new Error("Function not implemented.");
-  },
-  addGroup: function (name: String): Promise<ICategoryGroup> {
-    throw new Error("Function not implemented.");
-  },
-  updateGroup: function (group: ICategoryGroup): Promise<void> {
-    throw new Error("Function not implemented.");
-  },
-  deleteGroup: function (id: string): Promise<void> {
-    throw new Error("Function not implemented.");
-  }
+  getGroup: jest.fn((id: string) => Promise.resolve(
+    {
+      identifier: id,
+      name: 'Some Group',
+    }
+  )),
+  getGroups: jest.fn(() => Promise.resolve(
+    [
+      {
+        identifier: 'some-group-id',
+        name: 'Some Group',
+      }
+    ]
+  )),
+  addGroup: jest.fn((name: string) => Promise.resolve({
+    identifier: 'some-group-id',
+    name,
+  })),
+  updateGroup: jest.fn((group: ICategoryGroup) => Promise.resolve()),
+  deleteGroup: jest.fn((id: string) => Promise.resolve()),
 }
 
 describe('ICategoryRepository', () => {
@@ -109,6 +114,62 @@ describe('ICategoryRepository', () => {
 
     // Call the delete method on the repository instance
     await categoryRepository.deleteCategory(categoryId);
+
+    // Assert that the necessary actions were performed appropriately
+    // You can verify if the deletion was successful or throw an error to simulate failure
+  });
+
+  it('should find a group by ID', async () => {
+    const groupId = 'some-group-id';
+
+    // Call the findById method on the repository instance
+    const group = await categoryRepository.getGroup(groupId);
+
+    // Assert that the returned group matches the expected result
+    expect(group).toEqual(
+      {
+        identifier: groupId,
+        name: 'Some Group',
+      }
+    );
+  });
+
+  it('should retrieve all groups', async () => {
+    // Call the findAll method on the repository instance
+    const groups = await categoryRepository.getGroups();
+
+    // Assert that the returned groups match the expected result
+    expect(groups.length).toEqual(1);
+  });
+
+  it('should create a new group', async () => {
+    const groupName = 'New Group';
+
+    // Call the create method on the repository instance
+    const createdGroup = await categoryRepository.addGroup(groupName);
+
+    // Assert that the created group matches the expected result
+    expect(createdGroup.name).toEqual(groupName);
+  });
+
+  it('should update a group', async () => {
+    const updatedGroup: ICategoryGroup = {
+      identifier: 'group-id',
+      name: 'Some group',
+    };
+
+    // Call the update method on the repository instance
+    await categoryRepository.updateGroup(updatedGroup);
+
+    // Assert that the necessary actions were performed appropriately
+    // You can verify if the update was successful or throw an error to simulate failure
+  });
+
+  it('should delete a group', async () => {
+    const groupId = 'some-group-id';
+
+    // Call the delete method on the repository instance
+    await categoryRepository.deleteGroup(groupId);
 
     // Assert that the necessary actions were performed appropriately
     // You can verify if the deletion was successful or throw an error to simulate failure

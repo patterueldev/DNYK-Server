@@ -72,11 +72,4 @@ describe('MDCategoryDataSource', () => {
     expect(categoryFound.name).toBe(name);
     expect(categoryFound.groupId).toBe(groupId);
   });
-
-
-
-
-  // afterEach(async () => {
-  //   // await categoryRepository.deleteAll();
-  // });
 })
