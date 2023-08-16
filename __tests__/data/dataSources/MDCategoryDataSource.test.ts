@@ -1,57 +1,74 @@
-import { MDCategoryDataSource } from "../../../src/data/dataSources/MDCategoryDataSource";
+import { MDCategory, MDCategoryDataSource } from "../../../src/data/dataSources/MDCategoryDataSource";
 import { describe, it, expect} from "@jest/globals";
 import { ICategoryRepository } from "../../../src/data/repositories/ICategoryRepository";
-import { afterEach, before, beforeEach } from "node:test";
+import { afterEach, beforeEach } from "@jest/globals";
+import mongoose from "mongoose";
 
 describe('MDCategoryDataSource', () => {
   let categoryRepository: ICategoryRepository;
-  var categoryIDs: string[];
   
-  function initialize() {
-    let temp = 'mongodb://localhost:27017/test';
-    let uri = process.env.MONGO_URI_TEST || temp;
-    console.log('uri: ', uri);
+  // Before each test, we initialize the database connection
+  beforeEach(async () => {
+    let uri = process.env.MONGODB_URI;
+    if(!uri) throw new Error('No mongo uri found');
+    await mongoose.connect(uri);
     categoryRepository = new MDCategoryDataSource(uri);
-    categoryIDs = [];
-  }
+  });
 
-  async function createCategories() {
-    let category1 = await categoryRepository.create('category1', 'group1' );
-    let category2 = await categoryRepository.create('category2', 'group1' );
-    categoryIDs.push(category1.identifier);
-    categoryIDs.push(category2.identifier);
-  }
+  // After each test, we delete all the data
+  afterEach(async () => {
+    await MDCategory.deleteMany();
+    await mongoose.connection.close();
+  });
 
-  // test create first, so we could get the id for the other tests
   it('should create two category', async () => {
-    initialize();
-    await createCategories();
-    expect(categoryIDs).toBeGreaterThanOrEqual(2);
+    // given
+    let name = 'category1';
+    let groupId = 'group1';
+
+    // when
+    let category = await categoryRepository.create('category1', 'group1' );
+
+    // then
+    expect(category).toHaveProperty('identifier');
   });
 
   it('should get all categories', async () => {
-    initialize()
+    // given - populate the database
+    let groupId = 'group1';
+    for(let i = 0; i < 2; i++) {
+      let name = `category${i}`;
+      let category = await new MDCategory({name, groupId})
+      await category.save();
+    }
+
+    // when - get all categories
     let categories = await categoryRepository.findAll();
-    expect(categoryIDs).toBeGreaterThanOrEqual(2);
-    // check if the added category is in the list
-    expect(categories).toContain(
-      expect.arrayContaining([
-        expect.objectContaining({ name: 'category1' }),
-        expect.objectContaining({ name: 'category2' })
-      ])
-    );
+
+    // then - expect to have 2 categories
+    expect(categories).toHaveLength(2);
+    // expect all categories to be in the same group
+    for(let category of categories) {
+      expect(category.groupId).toBe(groupId);
+    }
   });
 
   it('should get category by id', async () => {
-    initialize()
-    await createCategories();
-    if(categoryIDs.length == 0) {
-      throw new Error('No category id found');
-    }
-    for (let id of categoryIDs) {
-      let category = await categoryRepository.findById(id);
-      expect(category).toHaveProperty('identifier');
-    }
+    // given
+    let name = 'category1';
+    let groupId = 'group1';
+    let newCategory = await new MDCategory({name, groupId})
+    await newCategory.save();
+    let id = newCategory._id.toString();
+
+    // when
+    let categoryFound = await categoryRepository.findById(id);
+    
+    // then
+    if (!categoryFound) throw new Error('Category not found');
+    expect(categoryFound.identifier).toBe(id);
+    expect(categoryFound.name).toBe(name);
+    expect(categoryFound.groupId).toBe(groupId);
   });
 
 

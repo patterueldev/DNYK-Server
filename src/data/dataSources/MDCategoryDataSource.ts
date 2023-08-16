@@ -38,9 +38,8 @@ export class MDCategoryDataSource implements ICategoryRepository {
   }
 
   async findById(id: string): Promise<ICategory | null> {
-    throw new Error("Method not implemented.");
-    // const category = await this.collection.findOne({ _id: id });
-    // return category ? category as ICategory : null;
+    const category = await MDCategory.findById(id);
+    return category;
   }
 
   async findAll(): Promise<ICategory[]> {
